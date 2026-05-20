@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MockFlow Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
+
+/* ── THEMES ── */
+[data-theme="dark"] {
+  --bg: #08080f;
+  --s1: #0e0e1a;
+  --s2: #141420;
+  --s3: #1c1c2e;
+  --s4: #252538;
+  --s5: #2e2e45;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --border3: rgba(255,255,255,0.16);
+  --text: #e8e8f0;
+  --text2: #888898;
+  --text3: #555568;
+  --card-hover: rgba(99,102,241,0.06);
+  --card-active: rgba(99,102,241,0.12);
+  --shadow: rgba(0,0,0,0.7);
+  --modal-bg: rgba(0,0,0,0.82);
+}
+
+[data-theme="light"] {
+  --bg: #f4f4f8;
+  --s1: #ffffff;
+  --s2: #f0f0f5;
+  --s3: #e8e8f0;
+  --s4: #dddde8;
+  --s5: #d0d0df;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.12);
+  --border3: rgba(0,0,0,0.18);
+  --text: #111122;
+  --text2: #555570;
+  --text3: #9999aa;
+  --card-hover: rgba(99,102,241,0.05);
+  --card-active: rgba(99,102,241,0.1);
+  --shadow: rgba(0,0,0,0.18);
+  --modal-bg: rgba(0,0,0,0.5);
+}
+
+:root {
+  --accent: #6366f1;
+  --accent-glow: rgba(99,102,241,0.22);
+  --success: #10b981;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  transition: background 0.25s, color 0.25s;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--s4); border-radius: 99px; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 272px;
+  min-width: 272px;
+  background: var(--s1);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  transition: background 0.25s, border-color 0.25s;
+}
+[dir="rtl"] .sidebar { border-right: none; border-left: 1px solid var(--border); }
+
+.sidebar-top { padding: 18px 14px 0; flex-shrink: 0; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.brand-left { display: flex; align-items: center; gap: 9px; }
+
+.brand-logo {
+  width: 30px; height: 30px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.brand-name { font-size: 13px; font-weight: 600; letter-spacing: -0.2px; color: var(--text); }
+.brand-ver { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+/* Theme toggle button */
+.theme-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: var(--s2);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.nav-tabs {
+  display: flex;
+  background: var(--s2);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 0;
+  transition: background 0.25s;
+}
+
+.ntab {
+  flex: 1;
+  padding: 6px 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-align: center;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+.ntab:hover { color: var(--text2); }
+.ntab.active {
+  background: var(--s1);
+  color: var(--text);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+.sidebar-body { flex: 1; overflow-y: auto; padding: 14px; }
+
+.tc { display: none; flex-direction: column; gap: 14px; }
+.tc.active { display: flex; }
+
+.field-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  margin-bottom: 6px;
+}
+
+/* ── DEVICE CATEGORY CARDS ── */
+.device-cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.device-cat-card {
+  background: var(--s2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.device-cat-card:hover { border-color: rgba(99,102,241,0.4); background: var(--card-hover); }
+.device-cat-card.active { border-color: var(--accent); background: var(--card-active); box-shadow: 0 0 0 1px var(--accent); }
+
+.dcc-icon { font-size: 26px; line-height: 1; }
+.dcc-name { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.dcc-sub { font-size: 9px; color: var(--text3); }
+
+/* Selected device info */
+.selected-device-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--s2);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  padding: 9px 11px;
+  margin-top: 2px;
+}
+.sdr-icon { font-size: 18px; flex-shrink: 0; }
+.sdr-info { flex: 1; }
+.sdr-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.sdr-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.sdr-change {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--card-active);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.sdr-change:hover { background: rgba(99,102,241,0.2); }
+
+/* ── COLOR TRIGGER ── */
+.color-trigger {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  color: var(--text);
+}
+.color-trigger:hover { border-color: var(--accent); }
+
+.clr-strip {
+  width: 38px; height: 22px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+[data-theme="light"] .clr-strip { border-color: rgba(0,0,0,0.1); }
+
+.clr-trigger-name { flex: 1; font-size: 12px; font-weight: 500; }
+.clr-arr { font-size: 9px; color: var(--text3); }
+
+/* ── UPLOAD ── */
+.upload-z {
+  background: var(--s2);
+  border: 1.5px dashed rgba(99,102,241,0.3);
+  border-radius: 10px;
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.upload-z:hover, .upload-z.drag { border-color: var(--accent); background: var(--card-hover); }
+.upload-z input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.up-icon { font-size: 20px; margin-bottom: 5px; opacity: 0.45; }
+.up-title { font-size: 12px; font-weight: 500; margin-bottom: 2px; color: var(--text); }
+.up-sub { font-size: 10px; color: var(--text3); }
+
+.thumbs { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.thumb { position: relative; width: 48px; height: 84px; border-radius: 7px; overflow: hidden; border: 1px solid var(--border2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-del {
+  position: absolute; top: 2px; right: 2px;
+  background: rgba(0,0,0,0.8); color: #fff;
+  border: none; border-radius: 50%;
+  width: 15px; height: 15px;
+  font-size: 10px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.thumb-n {
+  position: absolute; bottom: 2px; left: 2px;
+  background: var(--accent); color: #fff;
+  font-size: 9px; font-weight: 700;
+  border-radius: 3px; padding: 1px 4px;
+}
+
+.count-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--text3);
+  background: var(--s2); border-radius: 7px; padding: 7px 10px;
+}
+.count-row span { color: var(--accent); font-weight: 600; }
+
+/* ── SETTINGS ── */
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px;
+}
+.setting-row:last-child { border: none; }
+.sr-label { font-size: 12px; font-weight: 500; color: var(--text); }
+.sr-desc { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+.pill-toggle {
+  width: 36px; height: 20px;
+  background: var(--s4);
+  border-radius: 99px; position: relative;
+  cursor: pointer; border: none;
+  transition: background 0.2s; flex-shrink: 0;
+}
+.pill-toggle.on { background: var(--accent); }
+.pill-toggle::after {
+  content: ''; position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  background: #fff; border-radius: 50%;
+  transition: transform 0.2s;
+}
+.pill-toggle.on::after { transform: translateX(16px); }
+
+.mini-sel {
+  background: var(--s3); border: 1px solid var(--border2);
+  color: var(--text); border-radius: 7px;
+  padding: 5px 7px; font-size: 11px;
+  font-family: inherit; cursor: pointer; flex-shrink: 0;
+}
+
+.range-w { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.range-w input[type=range] { width: 75px; accent-color: var(--accent); cursor: pointer; }
+.rval { font-size: 11px; color: var(--accent); font-weight: 600; min-width: 22px; text-align: center; }
+
+/* ── SIDEBAR FOOTER ── */
+.sidebar-foot { padding: 12px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+
+.gen-btn {
+  width: 100%; padding: 11px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+.gen-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.gen-btn:disabled { opacity: 0.22; cursor: not-allowed; transform: none; filter: none; box-shadow: none; }
+
+/* ── MODALS ── */
+.modal-ov {
+  display: none; position: fixed; inset: 0;
+  background: var(--modal-bg); z-index: 1000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-ov.open { display: flex; }
+
+.modal-box {
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  transition: background 0.25s;
+}
+
+.modal-head {
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.modal-head h2 { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.modal-close {
+  background: var(--s3); border: 1px solid var(--border2);
+  color: var(--text2); border-radius: 7px;
+  width: 26px; height: 26px; cursor: pointer;
+  font-size: 13px; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: var(--s4); color: var(--text); }
+
+/* DEVICE MODAL */
+#dev-modal .modal-box { width: 740px; max-width: 95vw; max-height: 80vh; }
+
+.dev-modal-body { display: flex; flex: 1; overflow: hidden; }
+
+.dev-cat-sidebar {
+  width: 170px; min-width: 170px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 10px 8px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+[dir="rtl"] .dev-cat-sidebar { border-right: none; border-left: 1px solid var(--border); }
+
+.dcs-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 8px;
+  cursor: pointer; font-size: 11px; font-weight: 500;
+  color: var(--text2); border: none; background: none;
+  font-family: inherit; transition: all 0.15s;
+  width: 100%; text-align: left;
+}
+[dir="rtl"] .dcs-btn { text-align: right; }
+.dcs-btn:hover { background: var(--s2); color: var(--text); }
+.dcs-btn.active { background: var(--card-active); color: var(--accent); }
+.dcs-ico { font-size: 18px; flex-shrink: 0; }
+.dcs-count { font-size: 9px; margin-left: auto; color: var(--text3); background: var(--s3); border-radius: 99px; padding: 1px 6px; }
+[dir="rtl"] .dcs-count { margin-left: 0; margin-right: auto; }
+
+.dev-items-area { flex: 1; overflow-y: auto; padding: 14px; }
+
+.dev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 7px;
+}
+
+.dev-card {
+  background: var(--s2); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 12px 8px;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px; text-align: center;
+}
+.dev-card:hover { border-color: rgba(99,102,241,0.4); background: var(--card-hover); }
+.dev-card.active { border-color: var(--accent); background: var(--card-active); box-shadow: 0 0 0 1px var(--accent); }
+.dc-ico { font-size: 28px; line-height: 1; }
+.dc-name { font-size: 11px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.dc-badge { font-size: 9px; padding: 2px 7px; border-radius: 99px; background: var(--card-active); color: var(--accent); font-weight: 600; }
+
+/* COLOR MODAL */
+#clr-modal .modal-box { width: 660px; max-width: 95vw; max-height: 82vh; }
+
+.clr-modal-body { flex: 1; overflow-y: auto; padding: 14px 18px; }
+
+.clr-group { margin-bottom: 20px; }
+.clr-group-title {
+  font-size: 10px; font-weight: 700;
+  color: var(--text3); text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 9px;
+  display: flex; align-items: center; gap: 8px;
+}
+.clr-group-title::after { content:''; flex:1; height:1px; background:var(--border); }
+[dir="rtl"] .clr-group-title::after { display:none; }
+[dir="rtl"] .clr-group-title::before { content:''; flex:1; height:1px; background:var(--border); }
+
+.clr-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 6px; }
+
+.clr-sw {
+  height: 50px; border-radius: 8px;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all 0.18s; position: relative; overflow: hidden;
+}
+.clr-sw:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.3); }
+.clr-sw.active { border-color: #fff; box-shadow: 0 0 0 2px var(--accent); transform: scale(1.05); }
+[data-theme="light"] .clr-sw:hover { border-color: rgba(0,0,0,0.3); }
+[data-theme="light"] .clr-sw.active { border-color: #333; }
+
+.csw-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.62); font-size: 8px;
+  text-align: center; padding: 3px; color: #fff; font-weight: 600;
+}
+
+.custom-clr-sec { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 2px; }
+.custom-clr-title { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+.custom-clr-row { display: flex; gap: 7px; align-items: center; }
+.custom-clr-row input[type=color] { width: 38px; height: 38px; border: 1px solid var(--border2); border-radius: 8px; cursor: pointer; padding: 3px; background: var(--s2); flex-shrink: 0; }
+.custom-clr-row input[type=text] { flex: 1; background: var(--s2); border: 1px solid var(--border2); border-radius: 7px; padding: 7px 9px; color: var(--text); font-size: 12px; font-family: monospace; }
+.custom-clr-row input[type=text]:focus { outline: none; border-color: var(--accent); }
+.apply-btn { background: var(--accent); color: #fff; border: none; border-radius: 7px; padding: 7px 13px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; flex-shrink: 0; }
+
+/* ── MAIN ── */
+.main {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: auto; padding: 24px; gap: 16px;
+  background: var(--bg); transition: background 0.25s;
+}
+
+.empty-state { text-align: center; color: var(--text3); pointer-events: none; }
+.empty-phones { display: flex; gap: 8px; align-items: flex-end; justify-content: center; margin-bottom: 20px; }
+.ep { border-radius: 6px; border: 1px solid var(--s4); background: var(--s2); }
+.empty-title { font-size: 18px; font-weight: 600; color: var(--text3); margin-bottom: 8px; opacity: 0.4; }
+.empty-desc { font-size: 13px; line-height: 1.8; }
+
+.loading-w { display: none; flex-direction: column; align-items: center; gap: 12px; color: var(--text3); font-size: 13px; }
+.spin { width: 34px; height: 34px; border: 2px solid rgba(99,102,241,0.15); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#result-area { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 1400px; }
+#out-canvas { max-width: 100%; border-radius: 14px; box-shadow: 0 30px 80px var(--shadow); }
+
+.action-row { display: flex; gap: 8px; }
+.action-btn {
+  padding: 9px 20px; border-radius: 8px;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.action-btn.primary { background: var(--success); color: #fff; border: none; }
+.action-btn.secondary { background: var(--s2); color: var(--text2); border: 1px solid var(--border2); }
+.action-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.toast {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--s3); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 9px 18px;
+  font-size: 12px; font-weight: 500; z-index: 9999;
+  color: var(--success);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-top">
+    <div class="brand">
+      <div class="brand-left">
+        <div class="brand-logo">⬡</div>
+        <div>
+          <div class="brand-name">MockFlow Pro</div>
+          <div class="brand-ver">v2.1</div>
+        </div>
+      </div>
+      <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+    <div class="nav-tabs">
+      <button class="ntab active" data-tab="design" id="nt-design">Design</button>
+      <button class="ntab" data-tab="device" id="nt-device">Device</button>
+      <button class="ntab" data-tab="settings" id="nt-settings">Settings</button>
+    </div>
+  </div>
+
+  <div class="sidebar-body">
+
+    <!-- TAB: DESIGN -->
+    <div class="tc active" id="tc-design">
+      <div>
+        <div class="field-label" id="lbl-bg">Background</div>
+        <button class="color-trigger" id="open-clr">
+          <div class="clr-strip" id="clr-strip"></div>
+          <span class="clr-trigger-name" id="clr-name">Choose gradient</span>
+          <span class="clr-arr">▼</span>
+        </button>
+      </div>
+      <div>
+        <div class="field-label" id="lbl-imgs">Images</div>
+        <div class="upload-z" id="upload-z">
+          <input type="file" id="file-in" accept="image/*" multiple>
+          <div class="up-icon">↑</div>
+          <div class="up-title" id="up-title">Drop images or click</div>
+          <div class="up-sub" id="up-sub">PNG · JPG · WEBP · up to 5</div>
+        </div>
+        <div class="thumbs" id="thumbs" style="margin-top:8px"></div>
+        <div class="count-row" style="margin-top:6px">
+          <span><span id="img-n">0</span> <span id="lbl-up">uploaded</span></span>
+          <span id="layout-lbl" style="color:var(--text3)">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: DEVICE -->
+    <div class="tc" id="tc-device">
+      <div>
+        <div class="field-label" id="lbl-dev">Choose Category</div>
+        <div class="device-cat-grid" id="dev-cat-grid"></div>
+      </div>
+      <div>
+        <div class="field-label" id="lbl-sel-dev">Selected Device</div>
+        <div class="selected-device-row">
+          <span class="sdr-icon" id="sdr-icon">🍎</span>
+          <div class="sdr-info">
+            <div class="sdr-name" id="sdr-name">iPhone 15 Pro</div>
+            <div class="sdr-sub" id="sdr-sub">Tap to change model</div>
+          </div>
+          <button class="sdr-change" id="sdr-change-btn" id="lbl-change">Change</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: SETTINGS -->
+    <div class="tc" id="tc-settings">
+      <div class="field-label" id="lbl-set">Settings</div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-lang">Language</div><div class="sr-desc" id="s-lang-d">Interface language</div></div>
+        <select class="mini-sel" id="lang-sel">
+          <option value="en">🇺🇸 English</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="zh">🇨🇳 中文</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-theme">Theme</div><div class="sr-desc" id="s-theme-d">Light / Dark mode</div></div>
+        <button class="pill-toggle" id="tog-theme"></button>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-shadow">Device Shadow</div><div class="sr-desc" id="s-shadow-d">Depth shadow effect</div></div>
+        <button class="pill-toggle on" id="tog-shadow"></button>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-btns">Side Buttons</div><div class="sr-desc" id="s-btns-d">Show physical buttons</div></div>
+        <button class="pill-toggle on" id="tog-btns"></button>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-notch">Notch / Island</div><div class="sr-desc" id="s-notch-d">Dynamic Island / Notch</div></div>
+        <button class="pill-toggle on" id="tog-notch"></button>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-qual">Export Quality</div><div class="sr-desc" id="s-qual-d">Output resolution</div></div>
+        <select class="mini-sel" id="qual-sel">
+          <option value="1">HD</option>
+          <option value="1.5" selected>Full HD</option>
+          <option value="2">4K</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <div><div class="sr-label" id="s-pad">Padding</div><div class="sr-desc" id="s-pad-d">Background margin</div></div>
+        <div class="range-w">
+          <input type="range" id="pad-r" min="0" max="120" value="50" step="5">
+          <span class="rval" id="pad-v">50</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar-foot">
+    <button class="gen-btn" id="gen-btn" disabled>
+      <span>⚡</span><span id="gen-text">Generate Mockup</span>
+    </button>
+  </div>
+</div>
+
+<!-- DEVICE MODAL -->
+<div class="modal-ov" id="dev-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="dev-modal-title">Choose Device</h2>
+      <button class="modal-close" id="close-dev">✕</button>
+    </div>
+    <div class="dev-modal-body">
+      <div class="dev-cat-sidebar" id="dev-cats"></div>
+      <div class="dev-items-area" id="dev-items"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COLOR MODAL -->
+<div class="modal-ov" id="clr-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="clr-modal-title">Choose Background</h2>
+      <button class="modal-close" id="close-clr">✕</button>
+    </div>
+    <div class="clr-modal-body" id="clr-body"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="empty-state" id="empty-st">
+    <div class="empty-phones">
+      <div class="ep" style="width:20px;height:48px;opacity:.25;transform:rotate(-7deg)"></div>
+      <div class="ep" style="width:26px;height:62px;opacity:.45"></div>
+      <div class="ep" style="width:20px;height:48px;opacity:.25;transform:rotate(7deg)"></div>
+    </div>
+    <div class="empty-title" id="e-title">Start Creating</div>
+    <div class="empty-desc" id="e-desc">Upload screenshots · choose device<br>pick a gradient · generate</div>
+  </div>
+
+  <div class="loading-w" id="loading">
+    <div class="spin"></div>
+    <span id="load-text">Generating...</span>
+  </div>
+
+  <div id="result-area">
+    <canvas id="out-canvas"></canvas>
+    <div class="action-row">
+      <button class="action-btn primary" id="dl-btn">↓ <span id="dl-text">Download PNG</span></button>
+      <button class="action-btn secondary" id="re-btn">↺ <span id="re-text">Regenerate</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ Downloaded</div>
+
+<script>
+/* ═══ DATA ═══ */
+const CATS = {
+  iPhone:    { icon:"🍎", label:"iPhone",    sub:"Apple",        color:"#555" },
+  Samsung:   { icon:"🌌", label:"Samsung",   sub:"Galaxy Series", color:"#1428A0" },
+  Pixel:     { icon:"🔮", label:"Pixel",     sub:"Google",       color:"#4285F4" },
+  OnePlus:   { icon:"🔴", label:"OnePlus",   sub:"& Xiaomi",     color:"#F5010C" },
+  iPad:      { icon:"🟦", label:"iPad",      sub:"Apple Tablet", color:"#555" },
+  MacPC:     { icon:"💻", label:"Mac & PC",  sub:"Desktop",      color:"#888" },
+};
+
+const DEVICES = {
+  iPhone: [
+    {id:"ip12",    name:"iPhone 12",          year:"2020", cfg:{rx:44,irx:40,nt:"pill",   nw:120,nh:24,ny:12,bc:"#1a1a1a",bw:3,pw:220,ph:450}},
+    {id:"ip12pro", name:"iPhone 12 Pro",      year:"2020", cfg:{rx:44,irx:40,nt:"pill",   nw:120,nh:24,ny:12,bc:"#2a2a2a",bw:3,pw:220,ph:450}},
+    {id:"ip12pm",  name:"iPhone 12 Pro Max",  year:"2020", cfg:{rx:44,irx:40,nt:"pill",   nw:120,nh:24,ny:12,bc:"#2a2a2a",bw:3,pw:240,ph:490}},
+    {id:"ip13",    name:"iPhone 13",          year:"2021", cfg:{rx:44,irx:40,nt:"pill",   nw:126,nh:26,ny:12,bc:"#1a1a1a",bw:3,pw:220,ph:450}},
+    {id:"ip13pro", name:"iPhone 13 Pro",      year:"2021", cfg:{rx:44,irx:40,nt:"pill",   nw:126,nh:26,ny:12,bc:"#2a2a2a",bw:3,pw:220,ph:450}},
+    {id:"ip13pm",  name:"iPhone 13 Pro Max",  year:"2021", cfg:{rx:44,irx:40,nt:"pill",   nw:126,nh:26,ny:12,bc:"#2a2a2a",bw:3,pw:240,ph:490}},
+    {id:"ip14",    name:"iPhone 14",          year:"2022", cfg:{rx:44,irx:40,nt:"pill",   nw:120,nh:26,ny:12,bc:"#1a1a1a",bw:3,pw:220,ph:450}},
+    {id:"ip14p",   name:"iPhone 14 Plus",     year:"2022", cfg:{rx:44,irx:40,nt:"pill",   nw:120,nh:26,ny:12,bc:"#1a1a1a",bw:3,pw:240,ph:490}},
+    {id:"ip14pro", name:"iPhone 14 Pro",      year:"2022", cfg:{rx:44,irx:40,nt:"island", nw:90, nh:28,ny:14,bc:"#2a2a2a",bw:3,pw:220,ph:450}},
+    {id:"ip14pm",  name:"iPhone 14 Pro Max",  year:"2022", cfg:{rx:44,irx:40,nt:"island", nw:90, nh:28,ny:14,bc:"#2a2a2a",bw:3,pw:240,ph:490}},
+    {id:"ip15",    name:"iPhone 15",          year:"2023", cfg:{rx:44,irx:40,nt:"island", nw:88, nh:28,ny:14,bc:"#1a1a1a",bw:3,pw:220,ph:450}},
+    {id:"ip15p",   name:"iPhone 15 Plus",     year:"2023", cfg:{rx:44,irx:40,nt:"island", nw:88, nh:28,ny:14,bc:"#1a1a1a",bw:3,pw:240,ph:490}},
+    {id:"ip15pro", name:"iPhone 15 Pro",      year:"2023", cfg:{rx:44,irx:40,nt:"island", nw:88, nh:28,ny:14,bc:"#2c2c2c",bw:3,pw:220,ph:450}},
+    {id:"ip15pm",  name:"iPhone 15 Pro Max",  year:"2023", cfg:{rx:44,irx:40,nt:"island", nw:88, nh:28,ny:14,bc:"#2c2c2c",bw:3,pw:240,ph:490}},
+    {id:"ip16",    name:"iPhone 16",          year:"2024", cfg:{rx:44,irx:40,nt:"island", nw:86, nh:28,ny:14,bc:"#1a1a1a",bw:3,pw:220,ph:450}},
+    {id:"ip16p",   name:"iPhone 16 Plus",     year:"2024", cfg:{rx:44,irx:40,nt:"island", nw:86, nh:28,ny:14,bc:"#1a1a1a",bw:3,pw:240,ph:490}},
+    {id:"ip16pro", name:"iPhone 16 Pro",      year:"2024", cfg:{rx:44,irx:40,nt:"island", nw:86, nh:28,ny:14,bc:"#2c2c2c",bw:3,pw:220,ph:450}},
+    {id:"ip16pm",  name:"iPhone 16 Pro Max",  year:"2024", cfg:{rx:44,irx:40,nt:"island", nw:86, nh:28,ny:14,bc:"#2c2c2c",bw:3,pw:240,ph:490}},
+  ],
+  Samsung: [
+    {id:"s23",   name:"Galaxy S23",       year:"2023", cfg:{rx:26,irx:22,nt:"dot",nw:16,nh:16,ny:14,bc:"#111",bw:2.5,pw:215,ph:440}},
+    {id:"s23p",  name:"Galaxy S23+",      year:"2023", cfg:{rx:26,irx:22,nt:"dot",nw:16,nh:16,ny:14,bc:"#111",bw:2.5,pw:230,ph:470}},
+    {id:"s23u",  name:"Galaxy S23 Ultra", year:"2023", cfg:{rx:18,irx:14,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2.5,pw:240,ph:490}},
+    {id:"s24",   name:"Galaxy S24",       year:"2024", cfg:{rx:26,irx:22,nt:"dot",nw:15,nh:15,ny:14,bc:"#111",bw:2.5,pw:215,ph:440}},
+    {id:"s24p",  name:"Galaxy S24+",      year:"2024", cfg:{rx:26,irx:22,nt:"dot",nw:15,nh:15,ny:14,bc:"#111",bw:2.5,pw:230,ph:470}},
+    {id:"s24u",  name:"Galaxy S24 Ultra", year:"2024", cfg:{rx:18,irx:14,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2.5,pw:240,ph:490}},
+    {id:"s25",   name:"Galaxy S25",       year:"2025", cfg:{rx:26,irx:22,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2.5,pw:215,ph:440}},
+    {id:"s25p",  name:"Galaxy S25+",      year:"2025", cfg:{rx:26,irx:22,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2.5,pw:230,ph:470}},
+    {id:"s25u",  name:"Galaxy S25 Ultra", year:"2025", cfg:{rx:18,irx:14,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2.5,pw:240,ph:490}},
+    {id:"zf5",   name:"Z Fold 5",         year:"2023", cfg:{rx:16,irx:12,nt:"dot",nw:12,nh:12,ny:14,bc:"#1a1a1a",bw:2.5,pw:200,ph:430}},
+    {id:"zf6",   name:"Z Fold 6",         year:"2024", cfg:{rx:16,irx:12,nt:"dot",nw:12,nh:12,ny:14,bc:"#1a1a1a",bw:2.5,pw:200,ph:430}},
+    {id:"zfl5",  name:"Z Flip 5",         year:"2023", cfg:{rx:28,irx:24,nt:"dot",nw:13,nh:13,ny:14,bc:"#1a1a1a",bw:2.5,pw:200,ph:435}},
+    {id:"zfl6",  name:"Z Flip 6",         year:"2024", cfg:{rx:28,irx:24,nt:"dot",nw:12,nh:12,ny:14,bc:"#1a1a1a",bw:2.5,pw:200,ph:435}},
+  ],
+  Pixel: [
+    {id:"px7",   name:"Pixel 7",        year:"2022", cfg:{rx:22,irx:18,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2,pw:215,ph:440}},
+    {id:"px7p",  name:"Pixel 7 Pro",    year:"2022", cfg:{rx:22,irx:18,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2,pw:225,ph:460}},
+    {id:"px8",   name:"Pixel 8",        year:"2023", cfg:{rx:20,irx:16,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2,pw:215,ph:440}},
+    {id:"px8p",  name:"Pixel 8 Pro",    year:"2023", cfg:{rx:20,irx:16,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2,pw:225,ph:460}},
+    {id:"px8a",  name:"Pixel 8a",       year:"2024", cfg:{rx:20,irx:16,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2,pw:210,ph:435}},
+    {id:"px9",   name:"Pixel 9",        year:"2024", cfg:{rx:20,irx:16,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2,pw:215,ph:440}},
+    {id:"px9p",  name:"Pixel 9 Pro",    year:"2024", cfg:{rx:20,irx:16,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2,pw:225,ph:460}},
+    {id:"px9xl", name:"Pixel 9 Pro XL", year:"2024", cfg:{rx:20,irx:16,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2,pw:235,ph:478}},
+  ],
+  OnePlus: [
+    {id:"op12",  name:"OnePlus 12",       year:"2024", cfg:{rx:22,irx:18,nt:"dot",nw:14,nh:14,ny:14,bc:"#111",bw:2,pw:215,ph:440}},
+    {id:"op13",  name:"OnePlus 13",       year:"2025", cfg:{rx:22,irx:18,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2,pw:215,ph:440}},
+    {id:"mi14",  name:"Xiaomi 14",        year:"2024", cfg:{rx:18,irx:14,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2,pw:212,ph:436}},
+    {id:"mi15",  name:"Xiaomi 15",        year:"2025", cfg:{rx:18,irx:14,nt:"dot",nw:12,nh:12,ny:14,bc:"#111",bw:2,pw:212,ph:436}},
+    {id:"mi14u", name:"Xiaomi 14 Ultra",  year:"2024", cfg:{rx:18,irx:14,nt:"dot",nw:13,nh:13,ny:14,bc:"#111",bw:2,pw:228,ph:466}},
+  ],
+  iPad: [
+    {id:"iair5",  name:"iPad Air 5 (M1)",    year:"2022", cfg:{rx:18,irx:14,nt:"pill",  nw:78,nh:20,ny:10,bc:"#2a2a2a",bw:3,pw:310,ph:415,isTab:true}},
+    {id:"iair6",  name:"iPad Air 6 (M2)",    year:"2024", cfg:{rx:18,irx:14,nt:"island",nw:68,nh:22,ny:12,bc:"#2a2a2a",bw:3,pw:310,ph:415,isTab:true}},
+    {id:"ip11m4", name:"iPad Pro 11\" (M4)", year:"2024", cfg:{rx:18,irx:14,nt:"island",nw:66,nh:22,ny:12,bc:"#2c2c2c",bw:3,pw:310,ph:415,isTab:true}},
+    {id:"ip13m4", name:"iPad Pro 13\" (M4)", year:"2024", cfg:{rx:18,irx:14,nt:"island",nw:66,nh:22,ny:12,bc:"#2c2c2c",bw:3,pw:360,ph:480,isTab:true}},
+    {id:"imini6", name:"iPad mini 6",        year:"2021", cfg:{rx:16,irx:12,nt:"pill",  nw:70,nh:20,ny:10,bc:"#2a2a2a",bw:3,pw:270,ph:360,isTab:true}},
+    {id:"ipad10", name:"iPad 10th Gen",      year:"2022", cfg:{rx:16,irx:12,nt:"island",nw:66,nh:20,ny:10,bc:"#1a1a1a",bw:3,pw:310,ph:415,isTab:true}},
+  ],
+  MacPC: [
+    {id:"mb14",  name:"MacBook Pro 14\"", year:"2024", cfg:{rx:12,irx:10,nt:"dot", nw:8,nh:8,ny:8,bc:"#2a2a2a",bw:4,pw:380,ph:260,isLap:true}},
+    {id:"mb16",  name:"MacBook Pro 16\"", year:"2024", cfg:{rx:12,irx:10,nt:"dot", nw:8,nh:8,ny:8,bc:"#2a2a2a",bw:4,pw:430,ph:292,isLap:true}},
+    {id:"imac",  name:"iMac 24\"",        year:"2024", cfg:{rx:10,irx:8, nt:"none",nw:0,nh:0,ny:0,bc:"#e0e0e0",bw:3,pw:420,ph:258,isDesk:true}},
+    {id:"pc27",  name:"Monitor 27\"",     year:"Gen",  cfg:{rx:8, irx:6, nt:"none",nw:0,nh:0,ny:0,bc:"#1a1a1a",bw:4,pw:420,ph:260,isDesk:true}},
+    {id:"pc4k",  name:"Monitor 4K 32\"",  year:"Gen",  cfg:{rx:8, irx:6, nt:"none",nw:0,nh:0,ny:0,bc:"#111",   bw:4,pw:480,ph:286,isDesk:true}},
+    {id:"surf",  name:"Surface Pro 9",    year:"2024", cfg:{rx:10,irx:8, nt:"none",nw:0,nh:0,ny:0,bc:"#c0c0c0",bw:3,pw:380,ph:253,isLap:true}},
+  ],
+};
+
+const COLORS = {
+  "Dark & Premium":[
+    {n:"Midnight",g:["#0f0c29","#302b63","#24243e"]},
+    {n:"Deep Ocean",g:["#0f2027","#203a43","#2c5364"]},
+    {n:"Night Sky",g:["#1a1a2e","#16213e","#0f3460"]},
+    {n:"Royal Purple",g:["#1e0a35","#3d0e45","#6b21a8"]},
+    {n:"Obsidian",g:["#111111","#1c1c1e","#000000"]},
+    {n:"Dark Forest",g:["#0a1628","#0d2137","#052e16"]},
+    {n:"Ink Blue",g:["#0d0d2b","#1a1a4e","#2d2b8f"]},
+    {n:"Espresso",g:["#1a0e00","#3d2200","#7c3f00"]},
+    {n:"Black Hole",g:["#000000","#130f40","#000000"]},
+    {n:"Dark Slate",g:["#0d0d0d","#1a1a2e","#2d2d44"]},
+  ],
+  "Vibrant":[
+    {n:"Sunset",g:["#f093fb","#f5576c","#4facfe"]},
+    {n:"Sunrise",g:["#fa709a","#fee140","#fa709a"]},
+    {n:"Ocean",g:["#4facfe","#00f2fe","#43e97b"]},
+    {n:"Aurora",g:["#a18cd1","#fbc2eb","#a1c4fd"]},
+    {n:"Emerald",g:["#43e97b","#38f9d7","#a1ffce"]},
+    {n:"Rose",g:["#ff9a9e","#fecfef","#ffecd2"]},
+    {n:"Gold",g:["#f7971e","#ffd200","#f7971e"]},
+    {n:"Indigo",g:["#667eea","#764ba2","#667eea"]},
+    {n:"Crimson",g:["#ff416c","#ff4b2b","#ff416c"]},
+    {n:"Teal",g:["#11998e","#38ef7d","#11998e"]},
+  ],
+  "Soft Pastels":[
+    {n:"Sky Blue",g:["#7cb3d4","#a8c8e8","#c5dcee"]},
+    {n:"Warm Gray",g:["#bdc3c7","#d5dbdb","#ecf0f1"]},
+    {n:"Pure White",g:["#f8f9fa","#ffffff","#f0f0f5"]},
+    {n:"Beige",g:["#f5e6d3","#fdf0e0","#fef9f0"]},
+    {n:"Mint",g:["#a8e6cf","#c3f0d9","#dfffed"]},
+    {n:"Peach",g:["#ffb3ba","#ffd0d6","#ffe8ea"]},
+    {n:"Lavender",g:["#c3b1e1","#ddd0f0","#eee8f8"]},
+    {n:"Ice",g:["#b3e5fc","#d1f0ff","#e8f8ff"]},
+    {n:"Lemon",g:["#f9f871","#fdff9e","#ffffc2"]},
+    {n:"Blush",g:["#ffd8a8","#ffe8c4","#fff4e0"]},
+  ],
+  "Nature":[
+    {n:"Tropical",g:["#134e5e","#71b280","#134e5e"]},
+    {n:"Clear Sky",g:["#2980b9","#6dd5fa","#ffffff"]},
+    {n:"Dune",g:["#c9a84c","#f5c842","#c9a84c"]},
+    {n:"Forest",g:["#56ab2f","#a8e063","#56ab2f"]},
+    {n:"Northern Lights",g:["#0f9b8e","#7d5a9e","#00c2cb"]},
+    {n:"Desert",g:["#e8d5b7","#c4a882","#e8d5b7"]},
+    {n:"Deep Sea",g:["#005c97","#363795","#005c97"]},
+    {n:"Autumn",g:["#d38312","#a83279","#d38312"]},
+    {n:"Spring",g:["#a1c4fd","#c2e9fb","#a1c4fd"]},
+    {n:"Volcano",g:["#200122","#6f0000","#200122"]},
+  ],
+  "Neon & Cyber":[
+    {n:"Neon Pink",g:["#0d0d0d","#1a0020","#e040fb"]},
+    {n:"Cyber Blue",g:["#000428","#004e92","#00d4ff"]},
+    {n:"Matrix",g:["#000000","#001a00","#00ff41"]},
+    {n:"Violet",g:["#0a0015","#1a0035","#9b59b6"]},
+    {n:"Lava",g:["#1a0000","#2d0000","#ff4500"]},
+    {n:"Cyan",g:["#000d0d","#001a1a","#00ffff"]},
+    {n:"Gold Neon",g:["#0d0900","#1a1200","#ffd700"]},
+    {n:"Magenta",g:["#1a0030","#0d0020","#ff00ff"]},
+    {n:"Ruby",g:["#0d0000","#200000","#cc0000"]},
+    {n:"Electric",g:["#1a1a2e","#16213e","#0f3460"]},
+  ],
+  "Material":[
+    {n:"Indigo",g:["#1565c0","#1976d2","#42a5f5"]},
+    {n:"Teal",g:["#00695c","#00897b","#4db6ac"]},
+    {n:"Deep Purple",g:["#4527a0","#5e35b1","#9575cd"]},
+    {n:"Orange",g:["#e65100","#f57c00","#ffb74d"]},
+    {n:"Red",g:["#b71c1c","#c62828","#ef9a9a"]},
+    {n:"Pink",g:["#880e4f","#ad1457","#f48fb1"]},
+    {n:"Cyan",g:["#006064","#00838f","#80deea"]},
+    {n:"Amber",g:["#f57f17","#f9a825","#fff176"]},
+    {n:"Brown",g:["#3e2723","#4e342e","#a1887f"]},
+    {n:"Blue Gray",g:["#263238","#37474f","#78909c"]},
+  ],
+};
+
+const I18N = {
+  en:{dir:"ltr",Design:"Design",Device:"Device",Settings:"Settings",Background:"Background",Images:"Images","Choose Category":"Choose Category","Selected Device":"Selected Device","Change":"Change","Drop images or click":"Drop images or click","up to 5":"up to 5",uploaded:"uploaded","Generate Mockup":"Generate Mockup","Download PNG":"Download PNG","Regenerate":"Regenerate","Start Creating":"Start Creating","Generating...":"Generating...","Choose gradient":"Choose gradient","Tap to change model":"Tap to change model","Choose Background":"Choose Background","Choose Device":"Choose Device","Language":"Language","Interface language":"Interface language","Theme":"Theme","Light / Dark mode":"Light / Dark mode","Device Shadow":"Device Shadow","Depth shadow effect":"Depth shadow effect","Side Buttons":"Side Buttons","Show physical buttons":"Show physical buttons","Notch / Island":"Notch / Island","Dynamic Island / Notch":"Dynamic Island / Notch","Export Quality":"Export Quality","Output resolution":"Output resolution","Padding":"Padding","Background margin":"Background margin","✓ Downloaded":"✓ Downloaded",
+    layouts:{"1":"Single","2":"Two","3":"Three","4":"Four","5":"Five"}},
+  ar:{dir:"rtl",Design:"تصميم",Device:"الجهاز",Settings:"إعدادات",Background:"الخلفية",Images:"الصور","Choose Category":"اختر الفئة","Selected Device":"الجهاز المختار","Change":"تغيير","Drop images or click":"اسحب أو اضغط لرفع الصور","up to 5":"حتى 5 صور",uploaded:"صورة مرفوعة","Generate Mockup":"إنشاء الموكاب","Download PNG":"تحميل PNG","Regenerate":"إعادة الإنشاء","Start Creating":"ابدأ الإنشاء","Generating...":"جاري الإنشاء...","Choose gradient":"اختر تدرجاً","Tap to change model":"اضغط لتغيير الموديل","Choose Background":"اختر الخلفية","Choose Device":"اختر الجهاز","Language":"اللغة","Interface language":"لغة الواجهة","Theme":"المظهر","Light / Dark mode":"فاتح / داكن","Device Shadow":"ظل الجهاز","Depth shadow effect":"ظل احترافي","Side Buttons":"أزرار الجانب","Show physical buttons":"إظهار الأزرار","Notch / Island":"الشق / الجزيرة","Dynamic Island / Notch":"الشق أو الجزيرة","Export Quality":"جودة التصدير","Output resolution":"دقة الصورة","Padding":"الهامش","Background margin":"هامش الخلفية","✓ Downloaded":"✓ تم التحميل",
+    layouts:{"1":"جهاز واحد","2":"جهازان","3":"ثلاثة","4":"أربعة","5":"خمسة"}},
+  fr:{dir:"ltr",Design:"Design",Device:"Appareil",Settings:"Réglages",Background:"Fond",Images:"Images","Choose Category":"Catégorie","Selected Device":"Appareil sélectionné","Change":"Changer","Drop images or click":"Glisser ou cliquer","up to 5":"jusqu'à 5",uploaded:"chargées","Generate Mockup":"Créer Mockup","Download PNG":"Télécharger PNG","Regenerate":"Régénérer","Start Creating":"Commencer","Generating...":"Génération...","Choose gradient":"Choisir dégradé","Tap to change model":"Changer modèle","Choose Background":"Choisir fond","Choose Device":"Choisir appareil","Language":"Langue","Interface language":"Langue interface","Theme":"Thème","Light / Dark mode":"Clair/Sombre","Device Shadow":"Ombre","Depth shadow effect":"Ombre profondeur","Side Buttons":"Boutons","Show physical buttons":"Afficher boutons","Notch / Island":"Encoche","Dynamic Island / Notch":"Dynamic Island","Export Quality":"Qualité","Output resolution":"Résolution","Padding":"Marge","Background margin":"Marge fond","✓ Downloaded":"✓ Téléchargé",
+    layouts:{"1":"Un","2":"Deux","3":"Trois","4":"Quatre","5":"Cinq"}},
+};
+
+/* ═══ STATE ═══ */
+let S = {
+  lang:"en", theme:"dark", activeCat:"iPhone",
+  deviceId:"ip15pro", deviceCfg:DEVICES.iPhone.find(d=>d.id==="ip15pro").cfg,
+  deviceName:"iPhone 15 Pro", deviceIcon:"🍎",
+  bgGradient:["#0f0c29","#302b63","#24243e"], bgName:"Midnight",
+  images:[], shadow:true, btns:true, notch:true, quality:1.5, padding:50,
+};
+
+function T(k){ return (I18N[S.lang]||I18N.en)[k]||(I18N.en[k]||k); }
+
+/* ═══ THEME ═══ */
+function setTheme(th){
+  S.theme=th;
+  document.documentElement.setAttribute("data-theme",th);
+  document.getElementById("theme-btn").textContent = th==="dark"?"☀️":"🌙";
+  const tog=document.getElementById("tog-theme");
+  th==="dark"?tog.classList.remove("on"):tog.classList.add("on");
+}
+
+document.getElementById("theme-btn").addEventListener("click",()=>setTheme(S.theme==="dark"?"light":"dark"));
+document.getElementById("tog-theme").addEventListener("click",()=>setTheme(S.theme==="dark"?"light":"dark"));
+
+/* ═══ TABS ═══ */
+document.querySelectorAll(".ntab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".ntab").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tc").forEach(t=>t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("tc-"+btn.dataset.tab).classList.add("active");
+  });
+});
+
+/* ═══ DEVICE CATEGORY CARDS ═══ */
+function buildCatGrid(){
+  const grid=document.getElementById("dev-cat-grid");
+  grid.innerHTML="";
+  Object.entries(CATS).forEach(([key,cat])=>{
+    const card=document.createElement("div");
+    card.className="device-cat-card"+(key===S.activeCat?" active":"");
+    card.innerHTML=`<div class="dcc-icon">${cat.icon}</div><div class="dcc-name">${cat.label}</div><div class="dcc-sub">${cat.sub}</div>`;
+    card.addEventListener("click",()=>{
+      S.activeCat=key;
+      document.querySelectorAll(".device-cat-card").forEach(c=>c.classList.remove("active"));
+      card.classList.add("active");
+      // open device modal filtered to this cat
+      buildDevModal(key);
+      document.getElementById("dev-modal").classList.add("open");
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ═══ DEVICE MODAL ═══ */
+function buildDevModal(initCat){
+  const cats=document.getElementById("dev-cats");
+  cats.innerHTML="";
+  const catKeys=Object.keys(DEVICES);
+  let activeCat=initCat||S.activeCat;
+
+  catKeys.forEach(key=>{
+    const cat=CATS[key];
+    const btn=document.createElement("button");
+    btn.className="dcs-btn"+(key===activeCat?" active":"");
+    btn.innerHTML=`<span class="dcs-ico">${cat.icon}</span><span>${cat.label}</span><span class="dcs-count">${DEVICES[key].length}</span>`;
+    btn.addEventListener("click",()=>{
+      document.querySelectorAll(".dcs-btn").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      renderDevItems(key);
+    });
+    cats.appendChild(btn);
+  });
+  renderDevItems(activeCat);
+}
+
+function renderDevItems(catKey){
+  const panel=document.getElementById("dev-items");
+  panel.innerHTML="";
+  const icon=CATS[catKey].icon;
+  const grid=document.createElement("div");
+  grid.className="dev-grid";
+  DEVICES[catKey].forEach(d=>{
+    const card=document.createElement("div");
+    card.className="dev-card"+(d.id===S.deviceId?" active":"");
+    card.innerHTML=`<div class="dc-ico">${icon}</div><div class="dc-name">${d.name}</div><div class="dc-badge">${d.year}</div>`;
+    card.addEventListener("click",()=>{
+      document.querySelectorAll(".dev-card").forEach(c=>c.classList.remove("active"));
+      card.classList.add("active");
+      S.deviceId=d.id; S.deviceCfg=d.cfg; S.deviceName=d.name; S.deviceIcon=icon;
+      document.getElementById("sdr-icon").textContent=icon;
+      document.getElementById("sdr-name").textContent=d.name;
+      document.getElementById("dev-modal").classList.remove("open");
+    });
+    grid.appendChild(card);
+  });
+  panel.appendChild(grid);
+}
+
+document.getElementById("open-dev")||null;
+document.getElementById("sdr-change-btn").addEventListener("click",()=>{ buildDevModal(S.activeCat); document.getElementById("dev-modal").classList.add("open"); });
+document.getElementById("close-dev").addEventListener("click",()=>document.getElementById("dev-modal").classList.remove("open"));
+document.getElementById("dev-modal").addEventListener("click",e=>{ if(e.target===document.getElementById("dev-modal")) document.getElementById("dev-modal").classList.remove("open"); });
+
+/* ═══ COLOR MODAL ═══ */
+function buildColorModal(){
+  const body=document.getElementById("clr-body");
+  body.innerHTML="";
+  for(const [gn,colors] of Object.entries(COLORS)){
+    const grp=document.createElement("div"); grp.className="clr-group";
+    grp.innerHTML=`<div class="clr-group-title">${gn}</div>`;
+    const grid=document.createElement("div"); grid.className="clr-swatches";
+    colors.forEach(c=>{
+      const sw=document.createElement("div");
+      sw.className="clr-sw"+(c.n===S.bgName?" active":"");
+      sw.style.background=`linear-gradient(135deg,${c.g.join(",")})`;
+      sw.innerHTML=`<div class="csw-label">${c.n}</div>`;
+      sw.addEventListener("click",()=>{
+        document.querySelectorAll(".clr-sw").forEach(x=>x.classList.remove("active"));
+        sw.classList.add("active");
+        S.bgGradient=c.g; S.bgName=c.n;
+        updateClrPreview(); document.getElementById("clr-name").textContent=c.n;
+      });
+      grid.appendChild(sw);
+    });
+    grp.appendChild(grid); body.appendChild(grp);
+  }
+  const cust=document.createElement("div"); cust.className="custom-clr-sec";
+  cust.innerHTML=`<div class="custom-clr-title">Custom gradient</div><div class="custom-clr-row"><input type="color" id="cc1" value="#6366f1"><input type="color" id="cc2" value="#a855f7"><input type="text" id="cc-nm" placeholder="Name..." value="Custom"><button class="apply-btn" id="apply-c">Apply</button></div>`;
+  body.appendChild(cust);
+  document.getElementById("apply-c").addEventListener("click",()=>{
+    const c1=document.getElementById("cc1").value, c2=document.getElementById("cc2").value, nm=document.getElementById("cc-nm").value||"Custom";
+    S.bgGradient=[c1,c2,c1]; S.bgName=nm;
+    document.querySelectorAll(".clr-sw").forEach(x=>x.classList.remove("active"));
+    updateClrPreview(); document.getElementById("clr-name").textContent=nm;
+  });
+}
+
+function updateClrPreview(){ document.getElementById("clr-strip").style.background=`linear-gradient(90deg,${S.bgGradient.join(",")})`; }
+
+document.getElementById("open-clr").addEventListener("click",()=>{ buildColorModal(); document.getElementById("clr-modal").classList.add("open"); });
+document.getElementById("close-clr").addEventListener("click",()=>document.getElementById("clr-modal").classList.remove("open"));
+document.getElementById("clr-modal").addEventListener("click",e=>{ if(e.target===document.getElementById("clr-modal")) document.getElementById("clr-modal").classList.remove("open"); });
+
+/* ═══ UPLOAD ═══ */
+const uz=document.getElementById("upload-z"), fi=document.getElementById("file-in");
+uz.addEventListener("dragover",e=>{e.preventDefault();uz.classList.add("drag")});
+uz.addEventListener("dragleave",()=>uz.classList.remove("drag"));
+uz.addEventListener("drop",e=>{e.preventDefault();uz.classList.remove("drag");loadFiles(e.dataTransfer.files)});
+fi.addEventListener("change",e=>{loadFiles(e.target.files);fi.value=""});
+
+function loadFiles(files){
+  const rem=5-S.images.length; if(rem<=0)return;
+  Array.from(files).slice(0,rem).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{const img=new Image();img.onload=()=>{S.images.push({url:ev.target.result,el:img});renderThumbs();updateUI();};img.src=ev.target.result;};
+    r.readAsDataURL(f);
+  });
+}
+
+function renderThumbs(){
+  const c=document.getElementById("thumbs"); c.innerHTML="";
+  S.images.forEach((item,i)=>{
+    const w=document.createElement("div"); w.className="thumb";
+    const img=document.createElement("img"); img.src=item.url;
+    const del=document.createElement("button"); del.className="thumb-del"; del.textContent="×";
+    del.onclick=e=>{e.stopPropagation();S.images.splice(i,1);renderThumbs();updateUI();};
+    const n=document.createElement("div"); n.className="thumb-n"; n.textContent=i+1;
+    w.appendChild(img);w.appendChild(del);w.appendChild(n);c.appendChild(w);
+  });
+}
+
+function updateUI(){
+  document.getElementById("img-n").textContent=S.images.length;
+  const layouts=T("layouts");
+  document.getElementById("layout-lbl").textContent=layouts[S.images.length]||"—";
+  document.getElementById("gen-btn").disabled=S.images.length===0;
+}
+
+/* ═══ SETTINGS TOGGLES ═══ */
+document.querySelectorAll(".pill-toggle").forEach(btn=>{
+  if(btn.id==="tog-theme") return;
+  btn.addEventListener("click",()=>{
+    btn.classList.toggle("on");
+    if(btn.id==="tog-shadow") S.shadow=btn.classList.contains("on");
+    if(btn.id==="tog-btns") S.btns=btn.classList.contains("on");
+    if(btn.id==="tog-notch") S.notch=btn.classList.contains("on");
+  });
+});
+
+document.getElementById("lang-sel").addEventListener("change",e=>{ S.lang=e.target.value; applyLang(); });
+document.getElementById("qual-sel").addEventListener("change",e=>S.quality=parseFloat(e.target.value));
+document.getElementById("pad-r").addEventListener("input",e=>{ S.padding=parseInt(e.target.value); document.getElementById("pad-v").textContent=S.padding; });
+
+/* ═══ I18N ═══ */
+function applyLang(){
+  const l=I18N[S.lang]||I18N.en;
+  document.documentElement.dir=l.dir;
+  [["nt-design","Design"],["nt-device","Device"],["nt-settings","Settings"],
+   ["lbl-bg","Background"],["lbl-imgs","Images"],["lbl-dev","Choose Category"],
+   ["lbl-sel-dev","Selected Device"],["sdr-change-btn","Change"],
+   ["up-title","Drop images or click"],["up-sub","up to 5"],
+   ["lbl-up","uploaded"],["gen-text","Generate Mockup"],
+   ["dl-text","Download PNG"],["re-text","Regenerate"],
+   ["e-title","Start Creating"],["load-text","Generating..."],
+   ["sdr-sub","Tap to change model"],["clr-modal-title","Choose Background"],
+   ["dev-modal-title","Choose Device"],["s-lang","Language"],["s-lang-d","Interface language"],
+   ["s-theme","Theme"],["s-theme-d","Light / Dark mode"],["s-shadow","Device Shadow"],
+   ["s-shadow-d","Depth shadow effect"],["s-btns","Side Buttons"],["s-btns-d","Show physical buttons"],
+   ["s-notch","Notch / Island"],["s-notch-d","Dynamic Island / Notch"],
+   ["s-qual","Export Quality"],["s-qual-d","Output resolution"],
+   ["s-pad","Padding"],["s-pad-d","Background margin"],
+  ].forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.textContent=T(key); });
+  if(!document.getElementById("clr-name").textContent||document.getElementById("clr-name").textContent===T("Choose gradient")){
+    document.getElementById("clr-name").textContent=S.bgName||T("Choose gradient");
+  }
+  updateUI();
+}
+
+/* ═══ DRAW ═══ */
+function rr(ctx,x,y,w,h,r){
+  r=Math.min(Math.abs(r),Math.abs(w)/2,Math.abs(h)/2);
+  ctx.beginPath();ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+function drawDevice(ctx,cx,cy,scale,rot,imgEl,cfg){
+  const pw=cfg.pw*scale, ph=cfg.ph*scale, bw=cfg.bw*scale, rx=cfg.rx*scale, irx=cfg.irx*scale;
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot*Math.PI/180);
+  if(S.shadow){ ctx.shadowColor="rgba(0,0,0,0.62)"; ctx.shadowBlur=42*scale; ctx.shadowOffsetY=18*scale; ctx.shadowOffsetX=2*scale; }
+
+  if(cfg.isDesk){
+    ctx.fillStyle=cfg.bc; rr(ctx,-pw/2-bw,-ph/2-bw,pw+bw*2,ph+bw*2,rx); ctx.fill();
+    ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.shadowOffsetX=0;
+    ctx.save(); rr(ctx,-pw/2,-ph/2,pw,ph,irx); ctx.clip(); ctx.drawImage(imgEl,-pw/2,-ph/2,pw,ph); ctx.restore();
+    ctx.fillStyle=cfg.bc; const sw=18*scale,sh=26*scale,sb=48*scale;
+    ctx.fillRect(-sw/2,ph/2+bw,sw,sh); ctx.fillRect(-sb/2,ph/2+bw+sh,sb,5*scale);
+  } else if(cfg.isLap){
+    ctx.fillStyle=cfg.bc; rr(ctx,-pw/2-bw,-ph/2-bw,pw+bw*2,ph+bw*2,rx); ctx.fill();
+    ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.shadowOffsetX=0;
+    ctx.save(); rr(ctx,-pw/2,-ph/2,pw,ph,irx); ctx.clip(); ctx.drawImage(imgEl,-pw/2,-ph/2,pw,ph); ctx.restore();
+    ctx.fillStyle=cfg.bc==="#c0c0c0"?"#b0b0b0":"#1e1e1e";
+    rr(ctx,-pw/2-16*scale,ph/2+bw,pw+32*scale,11*scale,4*scale); ctx.fill();
+    if(S.notch&&cfg.nt!=="none"&&cfg.nw>0){ ctx.fillStyle="#111"; ctx.beginPath(); ctx.arc(0,-ph/2+7*scale,4*scale,0,Math.PI*2); ctx.fill(); }
+  } else {
+    ctx.fillStyle=cfg.bc; rr(ctx,-pw/2-bw,-ph/2-bw,pw+bw*2,ph+bw*2,rx); ctx.fill();
+    ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.shadowOffsetX=0;
+    ctx.save(); rr(ctx,-pw/2,-ph/2,pw,ph,irx); ctx.clip(); ctx.drawImage(imgEl,-pw/2,-ph/2,pw,ph); ctx.restore();
+    if(S.notch&&cfg.nt!=="none"&&cfg.nw>0){
+      const nw=cfg.nw*scale,nh=cfg.nh*scale,ny=-ph/2+cfg.ny*scale;
+      ctx.fillStyle="#111";
+      if(cfg.nt==="dot"){ctx.beginPath();ctx.arc(0,ny+nh/2,nh/2,0,Math.PI*2);ctx.fill();}
+      else{rr(ctx,-nw/2,ny,nw,nh,nh/2);ctx.fill();}
+    }
+    if(S.btns){
+      const BW=3.5*scale; ctx.fillStyle="#333";
+      rr(ctx,pw/2+bw,-26*scale,BW,52*scale,BW/2);ctx.fill();
+      rr(ctx,-pw/2-bw-BW,-ph/2+75*scale,BW,30*scale,BW/2);ctx.fill();
+      rr(ctx,-pw/2-bw-BW,-ph/2+115*scale,BW,30*scale,BW/2);ctx.fill();
+      rr(ctx,-pw/2-bw-BW,-ph/2+52*scale,BW,18*scale,BW/2);ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+function getLayouts(n,W,H){
+  const cx=W/2,cy=H/2;
+  if(n===1) return [{x:cx,y:cy,s:1.0,r:0}];
+  if(n===2) return [{x:cx-W*0.178,y:cy,s:0.88,r:0},{x:cx+W*0.178,y:cy,s:0.88,r:0}];
+  if(n===3) return [{x:cx-W*0.258,y:cy+H*0.045,s:0.72,r:-8},{x:cx,y:cy,s:0.90,r:0},{x:cx+W*0.258,y:cy+H*0.045,s:0.72,r:8}];
+  if(n===4) return [{x:cx-W*0.338,y:cy+H*.06,s:.62,r:-12},{x:cx-W*.115,y:cy+H*.015,s:.80,r:-4},{x:cx+W*.115,y:cy+H*.015,s:.80,r:4},{x:cx+W*.338,y:cy+H*.06,s:.62,r:12}];
+  return [{x:cx-W*.39,y:cy+H*.085,s:.54,r:-15},{x:cx-W*.20,y:cy+H*.03,s:.70,r:-7},{x:cx,y:cy-H*.015,s:.85,r:0},{x:cx+W*.20,y:cy+H*.03,s:.70,r:7},{x:cx+W*.39,y:cy+H*.085,s:.54,r:15}];
+}
+
+/* ═══ GENERATE ═══ */
+document.getElementById("gen-btn").addEventListener("click",gen);
+document.getElementById("re-btn").addEventListener("click",gen);
+
+function gen(){
+  if(!S.images.length) return;
+  document.getElementById("empty-st").style.display="none";
+  document.getElementById("result-area").style.display="none";
+  document.getElementById("loading").style.display="flex";
+
+  requestAnimationFrame(()=>setTimeout(()=>{
+    const q=S.quality, n=S.images.length, cfg=S.deviceCfg, pad=S.padding;
+    const basePW=cfg.pw, basePH=cfg.ph;
+    let canvasW,canvasH;
+    if(n===1){ canvasW=Math.round((basePW+pad*2)*q); canvasH=Math.round((basePH+pad*2)*q); }
+    else{
+      const spread=n===2?2.5:n===3?3.3:n===4?4.1:4.8;
+      canvasW=Math.round((basePW*spread+pad*2)*q);
+      canvasH=Math.round((basePH+pad*3.5)*q);
+    }
+    canvasW=Math.min(canvasW,3400); canvasH=Math.min(canvasH,2200);
+
+    const canvas=document.getElementById("out-canvas");
+    canvas.width=canvasW; canvas.height=canvasH;
+    const ctx=canvas.getContext("2d");
+
+    const grd=ctx.createLinearGradient(0,0,canvasW,canvasH);
+    S.bgGradient.forEach((c,i)=>grd.addColorStop(i/Math.max(S.bgGradient.length-1,1),c));
+    ctx.fillStyle=grd; ctx.fillRect(0,0,canvasW,canvasH);
+
+    const layouts=getLayouts(n,canvasW,canvasH);
+    const drawOrder=n>=3?[...layouts.filter((_,i)=>i!==Math.floor(n/2)),layouts[Math.floor(n/2)]]:layouts;
+
+    drawOrder.forEach(pos=>{
+      const idx=layouts.indexOf(pos);
+      if(idx<S.images.length) drawDevice(ctx,pos.x,pos.y,pos.s,pos.r,S.images[idx].el,cfg);
+    });
+
+    document.getElementById("loading").style.display="none";
+    document.getElementById("result-area").style.display="flex";
+  },60));
+}
+
+document.getElementById("dl-btn").addEventListener("click",()=>{
+  const a=document.createElement("a");
+  a.download="mockflow-"+Date.now()+".png";
+  a.href=document.getElementById("out-canvas").toDataURL("image/png");
+  a.click(); showToast(T("✓ Downloaded"));
+});
+
+function showToast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),2800); }
+
+/* ═══ INIT ═══ */
+buildCatGrid();
+updateClrPreview();
+applyLang();
+</script>
+</body>
+</html>
