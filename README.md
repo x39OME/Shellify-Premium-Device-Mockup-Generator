@@ -1,1 +1,2 @@
-# Mockup-generator-by-AI
+# Mockup generator by AI
+## Mockup Generator
