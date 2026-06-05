@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MockFlow Studio</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="brand">
+      <div class="brand-left"><div class="brand-logo">&#9113;</div><span class="brand-name">MockFlow Studio</span></div>
+      <button class="theme-btn" id="theme-btn">&#127769;</button>
+    </div>
+    <div class="nav-tabs">
+      <button class="ntab active" data-t="design">Design</button>
+      <button class="ntab" data-t="device">Device</button>
+      <button class="ntab" data-t="bg">BG</button>
+      <button class="ntab" data-t="deco">Decor</button>
+      <button class="ntab" data-t="web">Web <span class="new-badge">NEW</span></button>
+      <button class="ntab" data-t="settings">Set</button>
+    </div>
+  </div>
+
+  <div class="sb-body">
+    <!-- DESIGN -->
+    <div class="tab active" id="t-design">
+      <div>
+        <div class="flabel" id="l-imgs">Images</div>
+        <div class="upload-box" id="upbox">
+          <input type="file" id="file-input" accept="image/*" multiple>
+          <div class="up-icon">&#8679;</div>
+          <div class="up-t" id="l-drop">Drop images or click</div>
+          <div class="up-s" id="l-upto">PNG &bull; JPG &bull; WEBP &mdash; up to 5</div>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+        <div class="count-row"><span><b id="img-count">0</b> <span id="l-uploaded">uploaded</span></span><span id="layout-name" style="color:var(--text3)">&mdash;</span></div>
+      </div>
+      <div>
+        <div class="flabel" id="l-arrange">Arrange &amp; Scale</div>
+        <div class="slider-group">
+          <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-gap">Spacing</span><span class="sl-val" id="v-gap">40px</span></div><input type="range" id="sl-gap" min="-80" max="240" value="40" step="4"></div>
+          <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-scale">Phone Scale</span><span class="sl-val" id="v-scale">100%</span></div><input type="range" id="sl-scale" min="40" max="300" value="100" step="2"></div>
+          <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-overlap">Overlap</span><span class="sl-val" id="v-overlap">0px</span></div><input type="range" id="sl-overlap" min="0" max="240" value="0" step="4"></div>
+          <!-- Rotation moved up here -->
+          <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-rot">Rotation</span><span class="sl-val" id="v-rot">0°</span></div><input type="range" id="sl-rot" min="-180" max="180" value="0" step="1"></div>
+        </div>
+        <div class="arrange-actions" style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border);">
+          <button class="mini-action-btn" id="reset-arrange-btn">&#8635; <span id="l-reset-arrange">Reset</span></button>
+        </div>
+      </div>
+
+<!-- Shadow + Notch in Design tab -->
+      <div class="design-toggles">
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-shadow-d">Device Shadow</div>
+            <div class="design-tog-sub" id="l-shadow-dd">Add depth shadow</div>
+          </div>
+          <button class="tog on" id="tog-shadow-d"></button>
+        </div>
+        <div class="shadow-extra" id="shadow-extra">
+          <div class="shadow-row">
+            <span class="phone-mini-lbl" id="l-shadow-color">Shadow Color</span>
+            <input type="color" id="shadow-color" value="#000000">
+          </div>
+          <div class="phone-mini-row">
+            <div class="phone-mini-head">
+              <span class="phone-mini-lbl" id="l-shadow-opacity">Shadow Opacity</span>
+              <span class="phone-mini-val" id="v-shadow-opacity">55%</span>
+            </div>
+            <input type="range" id="sl-shadow-opacity" min="5" max="100" value="55" step="5">
+          </div>
+        </div>
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-notch-d">Notch / Island</div>
+            <div class="design-tog-sub" id="l-notch-dd">Dynamic Island</div>
+          </div>
+          <button class="tog on" id="tog-notch-d"></button>
+        </div>
+
+      </div>
+
+      <!-- AUTO TOGGLES -->
+      <div class="design-toggles" style="margin-top:0">
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-autorot">Auto Rotation</div>
+            <div class="design-tog-sub" id="l-autorot-d">Side phones tilt</div>
+          </div>
+          <button class="tog on" id="tog-autorot"></button>
+        </div>
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-autoscale">Auto Scale</div>
+            <div class="design-tog-sub" id="l-autoscale-d">Side phones smaller</div>
+          </div>
+          <button class="tog on" id="tog-autoscale"></button>
+        </div>
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-autospacing">Auto Spacing</div>
+            <div class="design-tog-sub" id="l-autospacing-d">Equal spacing</div>
+          </div>
+          <button class="tog on" id="tog-autospacing"></button>
+        </div>
+        <div class="design-tog-row">
+          <div class="design-tog-info">
+            <div class="design-tog-lbl" id="l-autooverlap">Auto Overlap</div>
+            <div class="design-tog-sub" id="l-autooverlap-d">Depth overlap</div>
+          </div>
+          <button class="tog" id="tog-autooverlap"></button>
+        </div>
+      </div>
+
+      <!-- SHADOW + NOTCH (moved here, below auto toggles) -->
+      
+
+      <!-- PER-PHONE CONTROLS -->
+      <div>
+        <div class="flabel" id="l-per-phone">Per-Phone Control</div>
+        <div id="per-phone-list" class="per-phone-list">
+          <div class="per-phone-empty" id="l-upload-first">Upload images first</div>
+        </div>
+      </div>
+
+      
+
+      <!-- TEXT OVERLAY -->
+      <div>
+        <div class="flabel" id="l-text-sec">Text Overlay</div>
+        <div class="text-controls">
+          <textarea id="txt-input" class="txt-input" placeholder="Your app name..." rows="2" maxlength="160"></textarea>
+          <div class="txt-row">
+            <input type="color" id="txt-color" value="#ffffff" title="Text color">
+            <select class="mini-sel" id="txt-size" style="flex:1">
+              <option value="24">Small</option>
+              <option value="36" selected>Medium</option>
+              <option value="52">Large</option>
+              <option value="72">XLarge</option>
+            </select>
+            <select class="mini-sel" id="txt-align">
+              <option value="center" selected>Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+          <div class="txt-row">
+            <select class="mini-sel" id="txt-pos" style="flex:1">
+              <option value="top">Top</option>
+              <option value="center">Middle</option>
+              <option value="bottom" selected>Bottom</option>
+            </select>
+            <select class="mini-sel" id="txt-weight">
+              <option value="400">Regular</option>
+              <option value="600" selected>SemiBold</option>
+              <option value="700">Bold</option>
+              <option value="800">ExtraBold</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- FRAME COLOR -->
+      <div>
+        <div class="flabel" id="l-frame-sec">Frame Color</div>
+        <div class="frame-colors">
+          <button class="frame-clr active" data-clr="#1a1a1a" style="background:#1a1a1a" title="Black"></button>
+          <button class="frame-clr" data-clr="#f5f5f5" style="background:#f5f5f5" title="White"></button>
+          <button class="frame-clr" data-clr="#c0c0c0" style="background:#c0c0c0" title="Silver"></button>
+          <button class="frame-clr" data-clr="#b8860b" style="background:#b8860b" title="Gold"></button>
+          <button class="frame-clr" data-clr="#4a4a4a" style="background:#4a4a4a" title="Space Gray"></button>
+          <button class="frame-clr" data-clr="#1a237e" style="background:#1a237e" title="Deep Blue"></button>
+          <button class="frame-clr" data-clr="#7c0000" style="background:#7c0000" title="Deep Red"></button>
+          <input type="color" id="frame-custom" value="#1a1a1a" title="Custom color" style="width:32px;height:32px;border-radius:8px;border:2px solid var(--border2);cursor:pointer;padding:2px;background:var(--s2);">
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVICE -->
+    <div class="tab" id="t-device">
+      <div><div class="flabel" id="l-cat">Category</div><div class="cat-grid" id="cat-grid"></div></div>
+      <div><div class="flabel" id="l-seldev">Selected Device</div>
+        <div class="sel-dev"><span id="sel-icon"></span>
+          <div style="flex:1"><div class="sel-dev-name" id="sel-name">iPhone 15 Pro</div><div class="sel-dev-sub" id="l-tap">Tap category to change</div></div>
+          <button class="chg-btn" id="chg-btn">Change</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEB PREVIEW -->
+    <div class="tab" id="t-web">
+      <div>
+        <div class="flabel" id="l-web-url">Website URL</div>
+        <div class="web-url-wrap">
+          <input type="url" id="web-url-input" class="web-url-input" placeholder="https://example.com">
+          <button class="web-load-btn" id="web-load-btn">&#x27A4;</button>
+        </div>
+        <div class="web-status" id="web-status"></div>
+      </div>
+
+      <div>
+        <div class="flabel" id="l-web-frame">Frame Style</div>
+        <div class="web-frame-grid">
+          <button class="web-frame-btn active" data-frame="desktop" id="wf-desktop">
+            <span class="wf-icon">&#x1F5A5;</span>
+            <span id="l-wf-desktop">Desktop</span>
+          </button>
+          <button class="web-frame-btn" data-frame="macbook" id="wf-macbook">
+            <span class="wf-icon">&#x1F4BB;</span>
+            <span id="l-wf-macbook">MacBook</span>
+          </button>
+          <button class="web-frame-btn" data-frame="browser" id="wf-browser">
+            <span class="wf-icon">&#x1F310;</span>
+            <span id="l-wf-browser">Browser</span>
+          </button>
+          <button class="web-frame-btn" data-frame="phone" id="wf-phone">
+            <span class="wf-icon">&#x1F4F1;</span>
+            <span id="l-wf-phone">Mobile</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flabel" id="l-web-dim">Viewport Size</div>
+        <select class="mini-sel" id="web-viewport" style="width:100%">
+          <option value="1280x800">1280 × 800 — Desktop</option>
+          <option value="1440x900">1440 × 900 — Large</option>
+          <option value="1920x1080">1920 × 1080 — Full HD</option>
+          <option value="375x812">375 × 812 — iPhone</option>
+          <option value="768x1024">768 × 1024 — iPad</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="flabel" id="l-web-bg">Background</div>
+        <button class="trigger" id="web-open-cmod">
+          <div class="clr-strip" id="web-clr-strip" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+          <span class="clr-name" id="web-clr-name">Indigo</span>
+          <span style="font-size:9px;color:var(--text3)">&#9660;</span>
+        </button>
+      </div>
+
+      <div class="web-actions">
+        <button class="web-capture-btn" id="web-capture-btn">
+          <span id="web-capture-spinner" style="display:none">&#9696;</span>
+          &#x1F4F7; <span id="l-web-capture">Capture &amp; Preview</span>
+        </button>
+        <div class="web-hint" id="l-web-hint">Enter a URL and click capture to generate a website mockup</div>
+      </div>
+
+      <div class="web-preview-wrap" id="web-preview-wrap" style="display:none">
+        <div class="web-preview-label" id="l-web-preview">Preview</div>
+        <div class="web-preview-canvas" id="web-preview-canvas"></div>
+        <div class="web-preview-actions">
+          <button class="web-dl-btn" id="web-dl-btn">&#8595; <span id="l-web-dl">Download</span></button>
+          <button class="web-add-btn" id="web-add-btn">+ <span id="l-web-add">Add to Stage</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKGROUND -->
+    <div class="tab" id="t-bg">
+      <!-- Transparent toggle -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border-radius:9px;padding:10px 13px;border:1px solid var(--border2);">
+        <div>
+          <div class="set-lbl" id="l-bgmode">Transparent Background</div>
+          <div class="set-sub" id="l-bgmode-d">Export with no background</div>
+        </div>
+        <button class="tog" id="tog-transp"></button>
+      </div>
+
+      <!-- Sub-tabs for BG sections -->
+      <div class="bg-subtabs">
+        <button class="bg-subtab active" data-sub="templates" id="bst-tmpl">Templates</button>
+        <button class="bg-subtab" data-sub="colors" id="bst-clr">Colors</button>
+        <button class="bg-subtab" data-sub="size" id="bst-size">Size</button>
+      </div>
+
+      <!-- Templates (includes all image backgrounds + gradient templates) -->
+      <div class="bg-sub active" id="bsub-templates">
+        <div class="tmpl-search-row">
+          <input type="text" id="tmpl-search" class="tmpl-search" placeholder="Search templates...">
+          <button class="tmpl-shuffle-btn" id="tmpl-shuffle" title="Random template">&#x1F3B2;</button>
+        </div>
+        <div class="tmpl-filter-row">
+          <button class="tmpl-filter active" data-f="all" id="tf-all">All</button>
+          <button class="tmpl-filter" data-f="featured" id="tf-featured">Featured</button>
+          <button class="tmpl-filter" data-f="pattern" id="tf-pattern">Patterned</button>
+          <button class="tmpl-filter" data-f="dark" id="tf-dark">Dark</button>
+          <button class="tmpl-filter" data-f="light" id="tf-light">Light</button>
+        </div>
+        <div class="tmpl-grid" id="tmpl-grid"></div>
+      </div>
+
+      
+
+      <!-- 3) Colors with sub-categories -->
+      <div class="bg-sub" id="bsub-colors">
+        <!-- Recently Used Colors -->
+        <div class="recent-colors-row" id="recent-colors-row" style="display:none">
+          <div class="recent-colors-lbl" id="l-recent-colors">Recent</div>
+          <div class="recent-colors-list" id="recent-colors-list"></div>
+        </div>
+        <div class="color-tabs">
+          <button class="color-tab active" data-ct="gradient3" id="ct-grad3">3-Color</button>
+          <button class="color-tab" data-ct="gradient2" id="ct-grad2">2-Color</button>
+          <button class="color-tab" data-ct="mesh" id="ct-mesh">Mesh</button>
+          <button class="color-tab" data-ct="solid" id="ct-solid">Solid</button>
+          <button class="color-tab" data-ct="radial" id="ct-radial">Radial</button>
+        </div>
+        <div class="color-content" id="color-content"></div>
+        <div class="custom-clr-inline">
+          <div class="flabel" style="margin-top:8px">Custom Color</div>
+          <div class="custom-row">
+            <input type="color" id="custc1" value="#6366f1">
+            <input type="color" id="custc2" value="#a855f7">
+            <button class="apply-btn" id="apply-custc">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4) Background Size -->
+      <div class="bg-sub" id="bsub-size">
+        <div class="size-presets-row">
+          <button class="size-preset" data-w="1200" data-h="700">16:9 HD</button>
+          <button class="size-preset" data-w="1920" data-h="1080">Full HD</button>
+          <button class="size-preset" data-w="1080" data-h="1080">Square</button>
+          <button class="size-preset" data-w="1080" data-h="1920">Story</button>
+          <button class="size-preset" data-w="1200" data-h="630">OG Image</button>
+          <button class="size-preset" data-w="800" data-h="800">Profile</button>
+        </div>
+        <!-- Quick size presets inside Size tab -->
+        <div class="quick-presets-row">
+          <button class="qp-btn" data-w="1200" data-h="700" id="qp-def">Default</button>
+          <button class="qp-btn" data-w="1200" data-h="630" id="qp-post">Post</button>
+          <button class="qp-btn" data-w="1080" data-h="1080" id="qp-sq">Square</button>
+          <button class="qp-btn" data-w="1080" data-h="1920" id="qp-st">Story</button>
+          <button class="qp-btn" data-w="1920" data-h="1080" id="qp-hd">HD</button>
+        </div>
+        <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-width">Width</span><span class="sl-val" id="v-width">1200px</span></div><input type="range" id="sl-width" min="600" max="2400" value="1200" step="40"></div>
+        <!-- Aspect lock -->
+        <div class="aspect-lock-row">
+          <button class="aspect-lock-btn" id="aspect-lock-btn" title="Lock aspect ratio">&#x1F512; <span id="l-aspect-lock">Lock Ratio</span></button>
+          <span class="aspect-ratio-display" id="aspect-ratio-display">16:9</span>
+        </div>
+        <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-height">Height</span><span class="sl-val" id="v-height">700px</span></div><input type="range" id="sl-height" min="400" max="1600" value="700" step="20"></div>
+      </div>
+    </div>
+
+    <!-- DECOR -->
+    <div class="tab" id="t-deco">
+      <div>
+        <div class="flabel" id="l-adddeco">Add Decoration</div>
+        <div class="deco-grid" id="deco-grid"></div>
+        <div class="deco-hint" id="l-deco-hint">Select &rarr; click stage to place</div>
+      </div>
+      <div class="deco-sliders">
+        <div class="flabel" id="l-selitem">Selected Item</div>
+        <div class="deco-color-row">
+          <input type="color" id="deco-color" value="#ffffff">
+          <span class="sl-lbl" id="l-deco-color">Color</span>
+        </div>
+        <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-dsize">Size</span><span class="sl-val" id="v-dsize">48px</span></div><input type="range" id="sl-dsize" min="16" max="200" value="48" step="2"></div>
+        <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-dop">Opacity</span><span class="sl-val" id="v-dop">100%</span></div><input type="range" id="sl-dop" min="10" max="100" value="100" step="5"></div>
+        <div class="slider-row"><div class="slider-head"><span class="sl-lbl" id="l-drot">Rotation</span><span class="sl-val" id="v-drot">0&deg;</span></div><input type="range" id="sl-drot" min="-180" max="180" value="0" step="5"></div>
+        <div class="deco-actions" style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+          <button class="deco-act" id="deco-desel">Deselect</button>
+          <button class="deco-act red" id="deco-del">Delete</button>
+          <button class="deco-act red" id="deco-clear">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="tab" id="t-settings">
+      <div class="flabel" id="l-settings">Settings</div>
+      <div class="set-row"><div><div class="set-lbl" id="s-lang">Language</div><div class="set-sub" id="s-lang-d">Interface language</div></div>
+        <select class="mini-sel" id="sel-lang">
+          <option value="en">&#127482;&#127480; English</option>
+          <option value="ar">&#127480;&#127462; العربية</option>
+          <option value="fr">&#127467;&#127479; Français</option>
+          <option value="de">&#127465;&#127466; Deutsch</option>
+          <option value="es">&#127466;&#127480; Español</option>
+        </select>
+      </div>
+      <div class="set-row"><div><div class="set-lbl" id="s-format">Export Format</div><div class="set-sub" id="s-format-d">Image file type</div></div>
+        <select class="mini-sel" id="sel-format"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp">WEBP</option></select>
+      </div>
+      <div class="set-row"><div><div class="set-lbl" id="s-quality">Quality</div><div class="set-sub" id="s-quality-d">Export resolution</div></div>
+        <select class="mini-sel" id="sel-quality"><option value="1">HD</option><option value="2" selected>2x</option><option value="3">3x</option></select>
+      </div>
+      <div class="set-row"><div><div class="set-lbl" id="s-theme">Theme</div><div class="set-sub" id="s-theme-d">Light / Dark</div></div><button class="tog" id="tog-theme"></button></div>
+      
+      
+      <div class="set-row"><div><div class="set-lbl" id="s-save">Auto-Save</div><div class="set-sub" id="s-save-d">Save locally</div></div><button class="tog on" id="tog-save"></button></div>
+    </div>
+  </div>
+
+  <div class="sb-foot">
+    <div class="export-info" id="export-info">— select a background size —</div>
+
+    <div class="foot-row">
+      <div class="reset-group">
+      <button class="reset-btn" id="reset-btn" title="Reset all">&#8635;</button>
+      <div class="reset-menu" id="reset-menu">
+        <button class="reset-item" id="rst-images">Clear Images</button>
+        <button class="reset-item" id="rst-deco">Clear Decorations</button>
+        <button class="reset-item" id="rst-text">Clear Text</button>
+        <button class="reset-item red" id="rst-all">Reset All</button>
+      </div>
+    </div>
+      <button class="dl-btn" id="dl-btn" disabled><span class="dl-spinner" id="dl-spinner" style="display:none">&#9696;</span> &#8595; <span id="l-dl">Download</span></button>
+      <button class="wm-btn tog" id="tog-wm" title="Add MockFlow watermark to export">WM</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEVICE MODAL -->
+<div class="overlay" id="dmod"><div class="modal">
+  <div class="modal-h"><h2 id="l-choosedev">Choose Device</h2><button class="modal-x" id="dmod-close">&#10005;</button></div>
+  <div class="dmod-body"><div class="dmod-cats" id="dmod-cats"></div><div class="dmod-items" id="dmod-items"></div></div>
+</div></div>
+
+<!-- COLOR MODAL -->
+<div class="overlay" id="cmod"><div class="modal">
+  <div class="modal-h"><h2 id="l-choosebg">Choose Gradient</h2><button class="modal-x" id="cmod-close">&#10005;</button></div>
+  <div class="cmod-body" id="cmod-body"></div>
+</div></div>
+
+<!-- MAIN STAGE -->
+<div class="main">
+  <div class="stage-hint" id="stage-hint">Drag phones to move &bull; everything updates live</div>
+  <div id="stage-scroll">
+    <div id="stage">
+      <div id="stage-bg"></div>
+      <div id="deco-layer"></div>
+      <div id="phones-layer"></div>
+    </div>
+  </div>
+  <div class="empty" id="empty-state">
+    <div class="empty-title" id="l-start">Start Creating</div>
+    <div class="empty-desc" id="l-start-desc">Upload screenshots &bull; pick a template<br>drag phones &bull; download</div>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#10003; Done</div>
+
+
+
+
+<script src="assets.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
