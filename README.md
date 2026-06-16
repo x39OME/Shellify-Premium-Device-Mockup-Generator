@@ -7,7 +7,16 @@
 ![Vanilla JS](https://img.shields.io/badge/Vanilla-JavaScript-f59e0b?style=for-the-badge)
 
 ---
+## Preview Final Project
 
+- Home Screen
+- Product Screen
+  
+<img src="./preview/Shellify—ThePremiumMockupEngine.png" alt=" Design" />
+<img src="./preview/Shellify—ThePremiumMockupEngine-2.png" alt="Devices" />
+<img src="./preview/Shellify—ThePremiumMockupEngine-3.png" alt="Background" />
+
+---
 ## What is Shellify?
 
 Shellify is a free, open-source web tool that runs entirely in the browser with no dependencies and no backend. It lets you place your app screenshots inside realistic device frames with professional backgrounds, add decorations and text, and export publication-ready images in seconds — all processing stays 100% client-side, nothing is ever uploaded to a server.
