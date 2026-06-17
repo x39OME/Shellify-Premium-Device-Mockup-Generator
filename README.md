@@ -8,6 +8,7 @@
 
 - Built by Claude AI
 - Built with Claude Code and the Claude app
+- [First Release](https://x39ome.github.io/Shellify-Mockup/)
 
 ---
 
