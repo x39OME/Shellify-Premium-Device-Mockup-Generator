@@ -1,4 +1,4 @@
-# Shellify (formerly MockFlow Studio)
+# Shellify — The Premium Mockup Engine
 
 > A professional, browser-based mockup generator — no installation required.
 
@@ -6,12 +6,10 @@
 ![License](https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge)
 ![Vanilla JS](https://img.shields.io/badge/Vanilla-JavaScript-f59e0b?style=for-the-badge)
 
----
-
-# Shellify — The Premium Mockup Engine
-
 - Built by Claude AI
 - Built with Claude Code and the Claude app
+
+---
 
 ## Preview Final Project
 
