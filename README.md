@@ -7,6 +7,12 @@
 ![Vanilla JS](https://img.shields.io/badge/Vanilla-JavaScript-f59e0b?style=for-the-badge)
 
 ---
+
+# Shellify — The Premium Mockup Engine
+
+- Built by Claude AI
+- Built with Claude Code and the Claude app
+
 ## Preview Final Project
 
 - Home Screen
